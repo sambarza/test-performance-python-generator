@@ -2,6 +2,7 @@ import time
 import tracemalloc
 import random
 import json
+import pickle
 
 # Generate sample data: list of items with 'price'
 
@@ -36,9 +37,9 @@ def measure_performance(func, items):
 
 if __name__ == "__main__":
 
-    with open("items.json", "r") as f:
-        items = json.load(f)
-    print(f"Loaded {len(items):,}".replace(",", ".") + " items from items.json")
+    with open("items.pickle", "rb") as f:
+        items = pickle.load(f)
+    print(f"Loaded {len(items):,}".replace(",", ".") + " items from items.pickle")
 
     gen_perf = measure_performance(total_with_generator, items)
     loop_perf = measure_performance(total_with_loop, items)

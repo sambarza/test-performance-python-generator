@@ -1,3 +1,5 @@
 # Ignore generated items file
 items.json
+items.pickle
 .venv/
+.DS_Store
