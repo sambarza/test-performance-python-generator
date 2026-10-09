@@ -3,6 +3,7 @@ import tracemalloc
 import random
 import json
 import pickle
+import pandas as pd
 
 # Generate sample data: list of items with 'price'
 
@@ -13,6 +14,10 @@ def price_generator(items):
 # Function to calculate total using generator
 def total_with_generator(items):
     return sum(price_generator(items))
+
+# Function to calculate total using pandas
+def total_with_pandas(df):
+    return df['price'].sum()
 
 # Function to calculate total using loop
 def total_with_loop(items):
@@ -42,7 +47,15 @@ if __name__ == "__main__":
     print(f"Loaded {len(items):,}".replace(",", ".") + " items from items.pickle")
 
     gen_perf = measure_performance(total_with_generator, items)
-    loop_perf = measure_performance(total_with_loop, items)
-
     print(f"Generator - Total: {gen_perf['result']:.2f}, Time: {gen_perf['time']:.6f}s, Peak Memory: {gen_perf['memory_peak']:.2f}KB")
+
+    loop_perf = measure_performance(total_with_loop, items)
     print(f"Loop      - Total: {loop_perf['result']:.2f}, Time: {loop_perf['time']:.6f}s, Peak Memory: {loop_perf['memory_peak']:.2f}KB")
+
+    df_creation_perf = measure_performance(pd.DataFrame, items)
+
+    df = df_creation_perf['result']
+    print(f"DataFrame created Time: {df_creation_perf['time']:.6f}s, Peak Memory: {df_creation_perf['memory_peak']:.2f}KB")
+
+    pandas_perf = measure_performance(total_with_pandas, df)
+    print(f"Pandas    - Total: {pandas_perf['result']:.2f}, Time: {pandas_perf['time']:.6f}s, Peak Memory: {pandas_perf['memory_peak']:.2f}KB")
